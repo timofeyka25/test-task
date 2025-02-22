@@ -1,0 +1,13 @@
+db:
+#  host: host.docker.internal
+  host: localhost
+  port: 6000
+  name: "database"
+  user: "postgres"
+  pass: "12345"
+
+http:
+  host: localhost
+  port: 8000
+  readTimeout: 10s
+  writeTimeout: 10s
