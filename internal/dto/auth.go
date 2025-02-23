@@ -1,6 +1,8 @@
 package dto
 
-import "time"
+import (
+	"time"
+)
 
 type SignUpRequest struct {
 	Username string `json:"username" validate:"required,min=6"`
@@ -15,4 +17,5 @@ type SignInRequest struct {
 type AuthResponse struct {
 	Token     string    `json:"token"`
 	ExpiresAt time.Time `json:"expires_at"`
+	Records   []Record  `json:"records,omitempty"`
 }

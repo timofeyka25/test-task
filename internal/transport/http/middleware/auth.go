@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"log"
 	"test-task/pkg/jwt"
 )
 
@@ -13,6 +14,7 @@ func AuthMiddleware(accessSecret string) fiber.Handler {
 
 		tokenString := c.Get("Authorization")
 		if tokenString == "" {
+			log.Println("missing auth token")
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"error": "Missing or invalid token",
 			})
@@ -24,6 +26,7 @@ func AuthMiddleware(accessSecret string) fiber.Handler {
 
 		claims, err := jwt.ValidateAccessToken(tokenString, accessSecret)
 		if err != nil {
+			log.Println("invalid token:", err)
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"error": "Invalid token",
 			})

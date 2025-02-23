@@ -9,5 +9,6 @@ var Module = fx.Module("handlers",
 	fx.Provide(
 		http.AsHandler(NewMetaHandler),
 		http.AsHandler(NewAuthHandler),
+		http.AsHandler(NewRecordHandler),
 	),
 )

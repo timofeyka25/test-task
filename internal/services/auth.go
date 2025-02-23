@@ -11,7 +11,8 @@ import (
 )
 
 type AuthService struct {
-	repo         repository.AuthRepository
+	authRepo     repository.AuthRepository
+	recordRepo   repository.RecordRepository
 	accessSecret string
 }
 
@@ -19,9 +20,13 @@ type AccessConfig struct {
 	AccessSecret string
 }
 
-func NewAuthService(repo repository.AuthRepository, config *AccessConfig) *AuthService {
+func NewAuthService(
+	authRepo repository.AuthRepository,
+	recordRepo repository.RecordRepository,
+	config *AccessConfig) *AuthService {
 	return &AuthService{
-		repo:         repo,
+		authRepo:     authRepo,
+		recordRepo:   recordRepo,
 		accessSecret: config.AccessSecret,
 	}
 }
@@ -36,7 +41,7 @@ func (s *AuthService) SignUp(ctx context.Context, req dto.SignUpRequest) (*dto.A
 		Username:     req.Username,
 		PasswordHash: passwordHash,
 	}
-	id, err := s.repo.CreateUser(ctx, nil, user)
+	id, err := s.authRepo.CreateUser(ctx, nil, user)
 	if err != nil {
 		return nil, errors.New("failed to create user")
 	}
@@ -49,14 +54,20 @@ func (s *AuthService) SignUp(ctx context.Context, req dto.SignUpRequest) (*dto.A
 		return nil, errors.New("failed to generate access token")
 	}
 
+	records, err := s.recordRepo.GetRandomRecords(ctx, nil)
+	if err != nil {
+		return nil, errors.New("failed to get random records")
+	}
+
 	return &dto.AuthResponse{
 		Token:     accessToken,
 		ExpiresAt: accessExpireTime,
+		Records:   dto.RecordsFromEntities(records),
 	}, nil
 }
 
 func (s *AuthService) SignIn(ctx context.Context, req dto.SignInRequest) (*dto.AuthResponse, error) {
-	user, err := s.repo.GetUserByUsername(ctx, nil, req.Username)
+	user, err := s.authRepo.GetUserByUsername(ctx, nil, req.Username)
 	if err != nil {
 		return nil, errors.New("failed to get user")
 	}
@@ -70,9 +81,15 @@ func (s *AuthService) SignIn(ctx context.Context, req dto.SignInRequest) (*dto.A
 		return nil, errors.New("failed to generate access token")
 	}
 
+	records, err := s.recordRepo.GetRandomRecords(ctx, nil)
+	if err != nil {
+		return nil, errors.New("failed to get random records")
+	}
+
 	return &dto.AuthResponse{
 		Token:     accessToken,
 		ExpiresAt: accessExpireTime,
+		Records:   dto.RecordsFromEntities(records),
 	}, nil
 }
 
