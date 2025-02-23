@@ -9,7 +9,6 @@ require (
 	github.com/pressly/goose/v3 v3.24.1
 	github.com/spf13/viper v1.19.0
 	go.uber.org/fx v1.23.0
-	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.34.0
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
@@ -51,6 +50,7 @@ require (
 	github.com/valyala/fasthttp v1.59.0 // indirect
 	go.uber.org/dig v1.18.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect

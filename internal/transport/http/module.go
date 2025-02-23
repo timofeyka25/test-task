@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
+	"log"
 )
 
 var Module = fx.Module("http",
@@ -23,20 +23,22 @@ func RunServer(lc fx.Lifecycle, server *Server) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			go func() {
-				zap.S().Info("Starting HTTP server...")
-				if err := server.app.Listen(fmt.Sprintf("%s:%d", server.cfg.Host, server.cfg.Port)); err != nil {
-					zap.S().Error("Error starting server", zap.Error(err))
+				addr := fmt.Sprintf("%s:%d", server.cfg.Host, server.cfg.Port)
+				log.Printf("Starting HTTP server at addr %s...", addr)
+
+				if err := server.app.Listen(addr); err != nil {
+					log.Println("Error starting server:", err)
 				}
 			}()
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
-			zap.S().Info("Shutting down HTTP server...")
+			log.Println("Shutting down HTTP server...")
 			if err := server.app.Shutdown(); err != nil {
-				zap.S().Error("Server shutdown error", zap.Error(err))
+				log.Println("Server shutdown error:", err)
 				return err
 			}
-			zap.S().Info("Server successfully stopped.")
+			log.Println("Server successfully stopped.")
 			return nil
 		},
 	})

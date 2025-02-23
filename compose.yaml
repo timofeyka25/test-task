@@ -10,5 +10,13 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
+  app:
+    build: .
+    ports:
+     - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+
 volumes:
   db_data:

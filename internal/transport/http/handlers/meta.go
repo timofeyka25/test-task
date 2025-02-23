@@ -1,6 +1,9 @@
 package handlers
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"log"
+)
 
 type metaHandler struct{}
 
@@ -9,6 +12,8 @@ func NewMetaHandler() *metaHandler {
 }
 
 func (h *metaHandler) Register(router fiber.Router) {
+	log.Println("Health handler")
+
 	router.Get("/health", h.health)
 }
 

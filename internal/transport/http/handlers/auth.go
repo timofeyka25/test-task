@@ -36,7 +36,7 @@ func (h *authHandler) signUp(c *fiber.Ctx) error {
 	if err := validator.ValidateStruct(&req); err != nil {
 		log.Println("failed to validate:", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
+			"error": "Validation error: Username should be longer than 6 characters, password longer than 8",
 		})
 	}
 
@@ -66,7 +66,7 @@ func (h *authHandler) signIn(c *fiber.Ctx) error {
 	if err := validator.ValidateStruct(&req); err != nil {
 		log.Println("failed to validate:", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
+			"error": "Validation error: Username should be longer than 6 characters, password longer than 8",
 		})
 	}
 

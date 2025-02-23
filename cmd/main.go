@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go.uber.org/zap"
+	"log"
 	"test-task/internal/container"
 	"time"
 )
@@ -11,11 +11,11 @@ func main() {
 
 	app := container.Build()
 
-	zap.S().Info("Starting application...")
+	log.Println("Starting application...")
 
-	zap.S().Infof("Up and running (%s)", time.Since(now))
+	log.Printf("Up and running (%s)", time.Since(now))
 
 	app.Run()
 
-	zap.S().Info("Service stopped.")
+	log.Println("Service stopped.")
 }
