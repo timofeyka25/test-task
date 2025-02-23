@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"sync"
+	"test-task/internal/services"
 	"test-task/internal/transport/http"
 	"test-task/pkg/pgsql"
 )
@@ -15,8 +16,9 @@ var (
 )
 
 type Config struct {
-	PgSQLConfig *pgsql.Config
-	HTTPConfig  *http.Config
+	PgSQLConfig  *pgsql.Config
+	HTTPConfig   *http.Config
+	AccessConfig *services.AccessConfig
 }
 
 func New() (*Config, error) {
@@ -31,11 +33,15 @@ func New() (*Config, error) {
 
 		databaseConfig := viper.Sub("db")
 		httpConfig := viper.Sub("http")
+		accessConfig := viper.Sub("access")
 
 		if err = parseSubConfig(databaseConfig, &config.PgSQLConfig); err != nil {
 			return
 		}
 		if err = parseSubConfig(httpConfig, &config.HTTPConfig); err != nil {
+			return
+		}
+		if err = parseSubConfig(accessConfig, &config.AccessConfig); err != nil {
 			return
 		}
 	})
